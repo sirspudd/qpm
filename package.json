@@ -1,0 +1,14 @@
+{
+  "name": "qpm",
+  "version": "0.1.0",
+  "description": "Qt Quick package manager",
+  "main": "qpm.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Donald Carr",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.3.0"
+  }
+}
