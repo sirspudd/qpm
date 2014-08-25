@@ -27,8 +27,8 @@ function install(packageName) {
 	console.log('Installing ' + qualifiedName);
 
 	var readStream = fs.createReadStream(qualifiedName);
-	readStream.pipe(tar.extract({ path: 'quick_modules' }));
-	readStream.on('end', install_success).on('error', error);
+	readStream.pipe(tar.extract('quick_modules'));
+	//readStream.on('end', install_success).on('error', error);
 }
 
 function publish(path) {
