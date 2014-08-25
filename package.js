@@ -80,10 +80,10 @@ function publish(packagePath) {
     var transientFileName = '/tmp/qpm/' + path.basename(resolvedPath) + '.tar.gz';
     try {
         fs.unlinkSync(transientFileName);
+        fs.mkdirSync('/tmp/qpm');
     } catch(e) {
         // no se proecupe
     }
-    fs.mkdir('/tmp/qpm');
     tarStream.pipe(zlib.createGzip()).pipe(fs.createWriteStream(transientFileName));
     tarStream.on('end', publish_success).on('error', error);
 }
