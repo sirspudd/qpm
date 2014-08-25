@@ -25,6 +25,11 @@ function publish_success() {
 }
 
 function install(packageName) {
+	if (packageName === true) {
+		console.log('Supply a packge name to install');
+		process.exit();
+	}
+    
 	var qualifiedName = '/tmp/' + packageName + '.tar';
 	debug('Installing ' + qualifiedName);
 
@@ -37,7 +42,7 @@ function publish(packagePath) {
     if (packagePath === true) packagePath = '.';
     packagePath = '.';
 	var qualifiedPath = path.resolve(packagePath);
-	debug('Publishing ' + qualifiedPath);
+	console.log('Publishing ' + qualifiedPath);
 	var tarStream = tar.pack(qualifiedPath, {
 		ignore: function(name) {
 			return path.extname(name) === '.git';
