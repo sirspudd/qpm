@@ -8,6 +8,7 @@ exports = module.exports = {
 require('colors');
 
 var debug = require('debug')('qpm:package'),
+    request = require('superagent'),
 	path = require('path'),
     tar = require('tar-fs'),
 	fs = require('fs');
@@ -26,28 +27,38 @@ function publish_success() {
 
 function install(packageName) {
 	if (packageName === true) {
-		console.log('Supply a packge name to install');
+		console.log('Supply a package name to install');
 		process.exit();
 	}
-    
-	var qualifiedName = '/tmp/' + packageName + '.tar';
-	debug('Installing ' + qualifiedName);
 
-	var readStream = fs.createReadStream(qualifiedName);
-	readStream.pipe(tar.extract('quick_modules/' + packageName));
-	readStream.on('end', install_success).on('error', error);
+    console.log('Fetching ' + packageName);
+
+    var req = request.get('http://localhost:3000/api/module').query({ name: packageName }).end(function(error, res){
+        if (error) console.log('Package fetch failed'.red);
+    });
+
+    var tarStream = tar.extract('quick_modules/' + packageName)
+
+    req.pipe(tarStream).on('end', function() {
+	   console.log('Installing ' + packageName);
+
+	   tarStream.on('end', install_success).on('error', error);
+    });
 }
 
 function publish(packagePath) {
     if (packagePath === true) packagePath = '.';
-    packagePath = '.';
-	var qualifiedPath = path.resolve(packagePath);
-	console.log('Publishing ' + qualifiedPath);
-	var tarStream = tar.pack(qualifiedPath, {
+
+    var qualifiedPath = path.resolve(packagePath);
+
+    console.log('Publishing ' + qualifiedPath);
+
+    var tarStream = tar.pack(qualifiedPath, {
 		ignore: function(name) {
 			return path.extname(name) === '.git';
 		}
 	});
+
 	tarStream.pipe(fs.createWriteStream('/tmp/' + path.basename(qualifiedPath) + '.tar'));
 	tarStream.on('end', publish_success).on('error', error);
 }
