@@ -85,5 +85,7 @@ function publish(packagePath) {
         // no se proecupe
     }
     tarStream.pipe(zlib.createGzip()).pipe(fs.createWriteStream(transientFileName));
-    tarStream.on('end', publish_success).on('error', error);
+    tarStream.on('end', function(){
+        request.post('http://localhost:3000/api/publish').attach('file', transientFileName).end(function(err, res) { console.log(err + ' ' + res)});
+    }).on('error', error);
 }
