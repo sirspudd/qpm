@@ -55,7 +55,7 @@ function publish(packagePath) {
 
     var tarStream = tar.pack(qualifiedPath, {
 		ignore: function(name) {
-			return path.extname(name) === '.git';
+			return name.indexOf('.git') !== -1;
 		}
 	});
 
