@@ -7,7 +7,8 @@ exports = module.exports = {
 
 require('colors');
 
-var tar = require('tar-fs'),
+var path = require('path'),
+    tar = require('tar-fs'),
 	fs = require('fs');
 
 function error() {
@@ -27,13 +28,14 @@ function install(packageName) {
 	console.log('Installing ' + qualifiedName);
 
 	var readStream = fs.createReadStream(qualifiedName);
-	readStream.pipe(tar.extract('quick_modules'));
+	readStream.pipe(tar.extract('quick_modules/' + packageName));
 	//readStream.on('end', install_success).on('error', error);
 }
 
-function publish(path) {
-	console.log('Publishing ' + path);
-	var tarStream = tar.pack(path);
-	tarStream.pipe(fs.createWriteStream('/tmp/package.tar'));
+function publish(packagePath) {
+	var qualifiedPath = path.resolve(packagePath);
+	console.log('Publishing ' + qualifiedPath);
+	var tarStream = tar.pack(qualifiedPath);
+	tarStream.pipe(fs.createWriteStream('/tmp/' + path.basename(qualifiedPath) + '.tar'));
 	tarStream.on('end', publish_success).on('error', error);
 }
