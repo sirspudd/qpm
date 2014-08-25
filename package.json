@@ -1,13 +1,19 @@
 {
   "name": "qpm",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Qt Quick package manager",
   "main": "qpm.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "qt",
+    "quick",
+    "qml",
+    "package manager"
+  ],
   "author": "Donald Carr",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "colors": "^0.6.2",
     "commander": "^2.3.0",
