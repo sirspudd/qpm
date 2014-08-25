@@ -33,6 +33,8 @@ function install(packageName) {
 }
 
 function publish(packagePath) {
+    if (packagePath === true) packagePath = '.';
+    packagePath = '.';
 	var qualifiedPath = path.resolve(packagePath);
 	console.log('Publishing ' + qualifiedPath);
 	var tarStream = tar.pack(qualifiedPath, {
