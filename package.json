@@ -17,6 +17,7 @@
   "dependencies": {
     "colors": "^0.6.2",
     "commander": "^2.3.0",
+    "debug": "^1.0.4",
     "fstream": "^1.0.2",
     "tar-fs": "^0.5.0"
   },

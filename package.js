@@ -7,41 +7,42 @@ exports = module.exports = {
 
 require('colors');
 
-var path = require('path'),
+var debug = require('debug')('qpm:package'),
+	path = require('path'),
     tar = require('tar-fs'),
 	fs = require('fs');
 
 function error() {
- 	console.log(('Error').red.bold);
+	debug('Error'.red.bold);
 }
 
 function install_success() {
- 	console.log(('Successfully installed module').green.bold);
+	debug('Successfully installed module'.green.bold);
 }
 
 function publish_success() {
- 	console.log(('Successfully published module').green.bold);
+	debug('Successfully published module'.green.bold);
 }
 
 function install(packageName) {
 	var qualifiedName = '/tmp/' + packageName + '.tar';
-	console.log('Installing ' + qualifiedName);
+	debug('Installing ' + qualifiedName);
 
 	var readStream = fs.createReadStream(qualifiedName);
 	readStream.pipe(tar.extract('quick_modules/' + packageName));
-	//readStream.on('end', install_success).on('error', error);
+	readStream.on('end', install_success).on('error', error);
 }
 
 function publish(packagePath) {
     if (packagePath === true) packagePath = '.';
     packagePath = '.';
 	var qualifiedPath = path.resolve(packagePath);
-	console.log('Publishing ' + qualifiedPath);
+	debug('Publishing ' + qualifiedPath);
 	var tarStream = tar.pack(qualifiedPath, {
-    ignore: function(name) {
-        return path.extname(name) === '.git'; // ignore .bin files when packing
-    }
-});
+		ignore: function(name) {
+			return path.extname(name) === '.git';
+		}
+	});
 	tarStream.pipe(fs.createWriteStream('/tmp/' + path.basename(qualifiedPath) + '.tar'));
 	tarStream.on('end', publish_success).on('error', error);
 }
