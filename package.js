@@ -14,7 +14,6 @@ var debug = require('debug')('qpm:package'),
     zlib = require('zlib'),
     fs = require('fs');
 
-var gzip = zlib.createGzip();
 
 function error() {
     debug('Error'.red.bold);
@@ -44,7 +43,7 @@ function install(packageName) {
 
     var tarStream = tar.extract('quick_modules/' + packageName);
 
-    req.pipe(gzip).pipe(tarStream).on('end', function() {
+    req.pipe(zlib.createGunzip()).pipe(tarStream).on('end', function() {
         console.log('Installing ' + packageName);
 
         tarStream.on('end', install_success).on('error', error);
@@ -77,8 +76,14 @@ function publish(packagePath) {
         }
     });
 
-    var transientFileName = '/tmp/' + path.basename(resolvedPath) + '.tar.gz';
-    fs.unlinkSync(transientFileName);
-    tarStream.pipe(gzip).pipe(fs.createWriteStream(transientFileName));
+
+    var transientFileName = '/tmp/qpm/' + path.basename(resolvedPath) + '.tar.gz';
+    try {
+        fs.unlinkSync(transientFileName);
+    } catch(e) {
+        // no se proecupe
+    }
+    fs.mkdir('/tmp/qpm');
+    tarStream.pipe(zlib.createGzip()).pipe(fs.createWriteStream(transientFileName));
     tarStream.on('end', publish_success).on('error', error);
 }
