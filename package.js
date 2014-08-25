@@ -5,14 +5,35 @@ exports = module.exports = {
 	publish: publish
 };
 
+require('colors');
+
 var tar = require('tar-fs'),
 	fs = require('fs');
 
-function install(packageName) {
-	console.log('Installing ' + packageName);
+function error() {
+ 	console.log(('Error').red.bold);
 }
 
-function publish(path, callback) {
+function install_success() {
+ 	console.log(('Successfully installed module').green.bold);
+}
+
+function publish_success() {
+ 	console.log(('Successfully published module').green.bold);
+}
+
+function install(packageName) {
+	var qualifiedName = '/tmp/' + packageName + '.tar';
+	console.log('Installing ' + packageName);
+
+	var readStream = fs.createReadStream(qualifiedName);
+	readStream.pipe(tar.Extract({ path: 'quick_modules' }));
+	readStream.on('end', install_success).on('error', error);
+}
+
+function publish(path) {
 	console.log('Publishing ' + path);
-	tar.pack(path).pipe(fs.createWriteStream('/tmp/package.tar')).end(callback);
+	var tarStream = tar.pack(path);
+	tarStream.pipe(fs.createWriteStream('/tmp/package.tar'));
+	tarStream.on('end', publish_success).on('error', error);
 }
