@@ -5,9 +5,9 @@ exports = module.exports = {
 	publish: publish
 };
 
-var tar = require('tar')
-  , fstream = require('fstream')
-  , fs = require('fs');
+var tar = require('tar'),
+	fstream = require('fstream'),
+	fs = require('fs');
 
 function install(packageName) {
 	console.log('Installing ' + packageName);
