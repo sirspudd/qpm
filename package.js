@@ -5,8 +5,7 @@ exports = module.exports = {
 	publish: publish
 };
 
-var tar = require('tar'),
-	fstream = require('fstream'),
+var tar = require('tar-fs'),
 	fs = require('fs');
 
 function install(packageName) {
@@ -14,10 +13,6 @@ function install(packageName) {
 }
 
 function publish(path, callback) {
-	var packageFileName = fs.createWriteStream('/tmp/' + 'fuckit.tar');
-	console.log('Publishing your package');
-	fstream.Reader({ path: path, type: 'Directory' })
-		.pipe(tar.Pack({ noProprietary: true }))
-		.pipe(packageFileName)
-		.end(callback);
+	console.log('Publishing ' + path);
+	tar.pack(path).pipe(fs.createWriteStream('/tmp/package.tar')).end(callback);
 }
