@@ -39,7 +39,7 @@ function install(packageName) {
         if (error) console.log('Package fetch failed'.red);
     });
 
-    var tarStream = tar.extract('quick_modules/' + packageName)
+    var tarStream = tar.extract('quick_modules/' + packageName);
 
     req.pipe(tarStream).on('end', function() {
         console.log('Installing ' + packageName);
@@ -51,11 +51,11 @@ function install(packageName) {
 function publish(packagePath) {
     if (packagePath === true) packagePath = '.';
 
-    var qualifiedPath = path.resolve(packagePath);
+    var resolvedPath = path.resolve(packagePath);
 
     var packageInfo = null;
     try {
-        packageInfo = JSON.parse(fs.readFileSync(qualifiedPath + '/package.json'));
+        packageInfo = JSON.parse(fs.readFileSync(resolvedPath + '/package.json'));
     } catch (e) {
         if ('ENOENT' === e.code) console.log(('No valid package.json found under ' + packagePath).red);
         process.exit(-1);
@@ -66,14 +66,16 @@ function publish(packagePath) {
         process.exit(-1);
     }
 
-    console.log('Publishing ' + qualifiedPath);
+    console.log('Publishing ' + resolvedPath);
 
-    var tarStream = tar.pack(qualifiedPath, {
+    var tarStream = tar.pack(resolvedPath, {
         ignore: function(name) {
             return name.indexOf('.git') !== -1;
         }
     });
 
-    tarStream.pipe(fs.createWriteStream('/tmp/' + path.basename(qualifiedPath) + '.tar'));
+    var transientFileName = '/tmp/' + path.basename(resolvedPath) + '.tar';
+    fs.unlinkSync(transientFileName);
+    tarStream.pipe(fs.createWriteStream(transientFileName));
     tarStream.on('end', publish_success).on('error', error);
 }
