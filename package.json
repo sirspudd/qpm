@@ -1,7 +1,7 @@
 {
   "quickModule": true,
   "name": "qpm",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "Qt Quick package manager",
   "main": "qpm.js",
   "scripts": {
@@ -13,6 +13,10 @@
     "qml",
     "package manager"
   ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
   "author": "Donald Carr",
   "license": "MIT",
   "dependencies": {
