@@ -35,7 +35,11 @@ function install(packageName) {
 function publish(packagePath) {
 	var qualifiedPath = path.resolve(packagePath);
 	console.log('Publishing ' + qualifiedPath);
-	var tarStream = tar.pack(qualifiedPath);
+	var tarStream = tar.pack(qualifiedPath, {
+    ignore: function(name) {
+        return path.extname(name) === '.git'; // ignore .bin files when packing
+    }
+});
 	tarStream.pipe(fs.createWriteStream('/tmp/' + path.basename(qualifiedPath) + '.tar'));
 	tarStream.on('end', publish_success).on('error', error);
 }
