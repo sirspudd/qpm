@@ -2,8 +2,9 @@
 
 'use strict';
 
-var program = require('commander');
-var manifest = require('./package.json');
+var program = require('commander'),
+	manifest = require('./package.json'),
+	packageInterface = require('./package.js');
 
 program
   .version(manifest.version)
@@ -11,7 +12,7 @@ program
   .option('-i, --install [module]', 'Install [module]')
   .parse(process.argv);
 
-if (program.publish) console.log('  - publish');
-if (program.install) console.log('  - install');
+if (program.publish) packageInterface.publish();
+if (program.install) packageInterface.install(program.install);
 
 if (process.argv.length < 3) program.help();
