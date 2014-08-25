@@ -24,10 +24,10 @@ function publish_success() {
 
 function install(packageName) {
 	var qualifiedName = '/tmp/' + packageName + '.tar';
-	console.log('Installing ' + packageName);
+	console.log('Installing ' + qualifiedName);
 
 	var readStream = fs.createReadStream(qualifiedName);
-	readStream.pipe(tar.Extract({ path: 'quick_modules' }));
+	readStream.pipe(tar.extract({ path: 'quick_modules' }));
 	readStream.on('end', install_success).on('error', error);
 }
 

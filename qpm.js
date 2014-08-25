@@ -8,7 +8,7 @@ var program = require('commander'),
 
 program
   .version(manifest.version)
-  .option('-p, --publish [path]', 'Publish to qpm repo', '.')
+  .option('-p, --publish [path]', 'Publish to qpm repo')
   .option('-i, --install [module]', 'Install [module]')
   .parse(process.argv);
 
