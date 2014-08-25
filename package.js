@@ -51,6 +51,19 @@ function publish(packagePath) {
 
     var qualifiedPath = path.resolve(packagePath);
 
+    var packageInfo = null;
+    try {
+        packageInfo = JSON.parse(fs.readFileSync(qualifiedPath + '/package.json'));
+    } catch(e) {
+        if ('ENOENT' === e.code) console.log(('No valid package.json found under ' + packagePath).red);
+        process.exit(-1);
+    }
+
+    if (!packageInfo.quickModule) {
+        console.log('Attempting to package a non quick module for qpm');
+        process.exit(-1);
+    }
+
     console.log('Publishing ' + qualifiedPath);
 
     var tarStream = tar.pack(qualifiedPath, {
