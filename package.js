@@ -79,8 +79,8 @@ function publish(packagePath) {
 
     var transientFileName = '/tmp/qpm/' + path.basename(resolvedPath) + '.tar.gz';
     try {
-        fs.unlinkSync(transientFileName);
         fs.mkdirSync('/tmp/qpm');
+        fs.unlinkSync(transientFileName);
     } catch(e) {
         // no se proecupe
     }
