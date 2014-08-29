@@ -7,8 +7,8 @@ var program = require('commander'),
     packageInterface = require('./package.js');
 
 program.version(manifest.version)
-    .option('-p, --publish [path]', 'Publish to qpm repo')
-    .option('-i, --install [module]', 'Install [module]')
+    .option('p, publish [path]', 'Publish to qpm repo')
+    .option('i, install [module]', 'Install [module]')
     .parse(process.argv);
 
 if (program.publish) packageInterface.publish(program.publish);
