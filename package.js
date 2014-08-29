@@ -86,6 +86,8 @@ function publish(packagePath) {
     }
     tarStream.pipe(zlib.createGzip()).pipe(fs.createWriteStream(transientFileName));
     tarStream.on('end', function(){
-        request.post('http://localhost:3000/api/publish').attach('file', transientFileName).end(function(err, res) { console.log(err + ' ' + res)});
+        request.post('http://localhost:3000/api/publish').attach('file', transientFileName).end(function(err, res) {
+         if (err) console.log('Upload failed', err)
+     });
     }).on('error', error);
 }
