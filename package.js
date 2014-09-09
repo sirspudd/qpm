@@ -14,6 +14,8 @@ var debug = require('debug')('qpm:package'),
     zlib = require('zlib'),
     fs = require('fs');
 
+// var hosturl = 'http://guarded-sands-4369.herokuapp.com/api/';
+var hosturl = 'http://localhost:3000/api/';
 
 function error() {
     debug('Error'.red.bold);
@@ -35,7 +37,7 @@ function install(packageName) {
 
     console.log('Fetching ' + packageName);
 
-    var req = request.get('http://localhost:3000/api/module').query({
+    var req = request.get(hosturl + 'module').query({
         name: packageName
     }).end(function(error, res) {
         if (error) console.log('Package fetch failed'.red);
@@ -60,12 +62,12 @@ function publish(packagePath) {
         packageInfo = JSON.parse(fs.readFileSync(resolvedPath + '/package.json'));
     } catch (e) {
         if ('ENOENT' === e.code) console.log(('No valid package.json found under ' + packagePath).red);
-        process.exit(-1);
+        process.exit(1);
     }
 
     if (!packageInfo.quickModule) {
         console.log('Attempting to package a non quick module for qpm');
-        process.exit(-1);
+        process.exit(1);
     }
 
     console.log('Publishing ' + resolvedPath);
@@ -86,10 +88,10 @@ function publish(packagePath) {
     }
     tarStream.pipe(zlib.createGzip()).pipe(fs.createWriteStream(transientFileName));
     tarStream.on('end', function(){
-        request.post('http://localhost:3000/api/publish').attach('file', transientFileName).end(function(err, res) {
+        request.post(hosturl + 'publish').attach('file', transientFileName).end(function(err, res) {
          if (err) {
             console.error('Upload failed', err)
-            exit(1);
+            process.exit(1);
         }
      });
     }).on('error', error);
