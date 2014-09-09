@@ -86,8 +86,9 @@ function publish(packagePath) {
     } catch(e) {
         // no se proecupe
     }
-    tarStream.pipe(zlib.createGzip()).pipe(fs.createWriteStream(transientFileName));
-    tarStream.on('end', function(){
+    var tarFile = fs.createWriteStream(transientFileName)
+    tarStream.pipe(zlib.createGzip()).pipe(tarFile);
+    tarFile.on('finish', function(){
         request.post(hosturl + 'publish').attach('file', transientFileName).end(function(err, res) {
          if (err) {
             console.error('Upload failed', err)
