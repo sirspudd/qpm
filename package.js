@@ -14,8 +14,8 @@ var debug = require('debug')('qpm:package'),
     zlib = require('zlib'),
     fs = require('fs');
 
-// var hosturl = 'http://guarded-sands-4369.herokuapp.com/api/';
-var hosturl = 'http://localhost:3000/api/';
+var hosturl = 'http://guarded-sands-4369.herokuapp.com/api/';
+//var hosturl = 'http://localhost:3000/api/';
 
 function error() {
     debug('Error'.red.bold);
