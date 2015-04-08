@@ -29,5 +29,16 @@
   },
   "bin": {
     "qpm": "./qpm.js"
-  }
+  },
+  "contributors": [
+    {
+      "name": "Donald Carr",
+      "email": "sirspudd+github@gmail.com",
+      "url": "https://github.com/sirspudd",
+      "contributions": 34,
+      "additions": 1439,
+      "deletions": 1287,
+      "hireable": true
+    }
+  ]
 }
